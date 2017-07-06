@@ -1,0 +1,81 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /_ah/spi/.*
+  script: api.api
+  secure: always
+
+- url: /tasks/cache_average_attempts
+  script: main.app
+
+- url: /crons/send_reminder
+  script: main.app
+
+- url: /api/v/(.*)
+  script: main.app
+
+- url: /api/p/(.*)
+  script: main.app
+
+- url: /api/login
+  script: main.app
+  secure: always
+
+- url: /api/signup
+  script: main.app
+
+- url: /api/account
+  script: main.app
+
+- url: /api/secure
+  script: main.app
+  secure: always
+
+- url: /
+  static_files: dist/index.html
+  upload: dist/index.html
+
+#- url: /
+#  script: main.app
+
+- url: /(.*)
+  static_files: dist/\1
+  upload: dist/(.*)
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+
+- name: endpoints
+  version: latest
+
+env_variables:
+  # Replace with your Firebase project ID.
+  FIREBASE_PROJECT_ID: 'gaming-140419'
+
+skip_files:
+
+- ^(.*/)?.*/assets/.*$
+- ^(.*/)?.*/build/.*$
+- ^(.*/)?.*/test/.*$
+- ^(.*/)?.*/templates/.*$
+- ^(.*/)?.*/node_modules/.*$
+
+- ^(assets/.*)
+- ^(build/.*)
+- ^(test/.*)
+- ^(templates/.*)
+- ^(node_modules/.*)
+
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.DS_Store$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
