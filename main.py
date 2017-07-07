@@ -2,28 +2,10 @@
 
 """main.py - This file contains handlers that are called by taskqueue and/or
 cronjobs."""
-import logging
-
-# from google.appengine.ext import vendor
-
-# vendor.add('lib')
-
-import os
-import json
-
-# from googleapiclient import discovery
-# from oauth2client import client
-# from oauth2client.contrib import appengine
-# from google.appengine.api import memcache
-from oauth2client import client, crypt
 
 import webapp2
 from webapp2_extras import auth
 from webapp2_extras import sessions
-from webapp2_extras.auth import InvalidAuthIdError
-from webapp2_extras.auth import InvalidPasswordError
-from google.appengine.api import mail, app_identity
-from api import WordBaitAPI
 
 from models import User, Game, Leaderboard
 webapp2_config = {}
