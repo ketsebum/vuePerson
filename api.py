@@ -33,7 +33,7 @@ class WordBaitAPI(remote.Service):
                       http_method='POST')
     def create_user(self, request):
         """Create a User. Requires a unique username"""
-        if User.query(User.name == request.user_name).get():
+        if User.query(User.firstName == request.user_name).get():
             raise endpoints.ConflictException(
                 'A User with that name already exists!')
         user = User(name=request.user_name, email=request.email)
