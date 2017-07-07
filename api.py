@@ -14,8 +14,11 @@ from models import User
 from models import StringMessage,UserForm, UserForms
 from utils import get_by_urlsafe, get_user
 
-USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
-                                           email=messages.StringField(2))
+USER_REQUEST = endpoints.ResourceContainer(firstName=messages.StringField(1),
+                                           lastName=messages.StringField(2),
+                                           dob=messages.StringField(3),
+                                           phoneNumber=messages.StringField(4),
+                                           zipCode=messages.StringField(5),)
 LOGIN_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                            password=messages.StringField(2))
 
@@ -33,13 +36,9 @@ class WordBaitAPI(remote.Service):
                       http_method='POST')
     def create_user(self, request):
         """Create a User. Requires a unique username"""
-        if User.query(User.firstName == request.user_name).get():
-            raise endpoints.ConflictException(
-                'A User with that name already exists!')
+        # No validation required for duplication
         user = User(name=request.user_name, email=request.email)
         user.put()
-        leaderboard = Leaderboard(user=user.key, wins=0, losses=0)
-        leaderboard.put()
         return StringMessage(message='User {} created!'.format(
             request.user_name))
 

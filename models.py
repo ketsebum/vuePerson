@@ -13,7 +13,7 @@ class User(ndb.Model):
     lastName = ndb.StringProperty(required=True)
     dob = ndb.DateProperty(required=False)
     phoneNumber = ndb.IntegerProperty(required=True, default=1)
-    zipcode = ndb.IntegerProperty(required=True, default=1)
+    zipCode = ndb.IntegerProperty(required=True, default=1)
 
     def get_all_users(self):
         users = User.query().fetch()
@@ -25,7 +25,7 @@ class User(ndb.Model):
         form.lastName = self.lastName
         form.date = self.dob.__format__('MM/DD/YY')
         form.phoneNumber = self.phoneNumber
-        form.zipcode = self.zipcode
+        form.zipCode = self.zipCode
         return form
 
 
@@ -35,7 +35,7 @@ class UserForm(messages.Message):
     lastName = messages.StringField(2, required=True)
     date = messages.StringField(3, required=True)
     phoneNumber = messages.StringField(4, required=True)
-    zipcode = messages.StringField(5, required=True)
+    zipCode = messages.StringField(5, required=True)
 
 class UserForms(messages.Message):
     """Return multiple ScoreForms"""
