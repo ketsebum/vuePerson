@@ -1,6 +1,6 @@
 """utils.py - File for collecting general utility functions."""
 
-from models import User, Game
+from models import User
 import logging
 import webapp2
 from webapp2_extras import sessions

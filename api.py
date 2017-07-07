@@ -18,8 +18,8 @@ USER_REQUEST = endpoints.ResourceContainer(firstName=messages.StringField(1),
                                            phoneNumber=messages.StringField(4),
                                            zipCode=messages.StringField(5))
 
-@endpoints.api(name='word_bait', version='v1')
-class WordBaitAPI(remote.Service):
+@endpoints.api(name='person', version='v1')
+class PersonAPI(remote.Service):
     """Person API"""
 
     @endpoints.method(request_message=USER_REQUEST,
@@ -48,4 +48,4 @@ class WordBaitAPI(remote.Service):
         return User.query().get().get_all_users()
 
 
-api = endpoints.api_server([WordBaitAPI])
+api = endpoints.api_server([PersonAPI])

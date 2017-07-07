@@ -7,7 +7,7 @@ import webapp2
 from webapp2_extras import auth
 from webapp2_extras import sessions
 
-from models import User, Game, Leaderboard
+from models import User
 webapp2_config = {}
 webapp2_config = {
   'webapp2_extras.auth': {
