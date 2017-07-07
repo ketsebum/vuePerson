@@ -10,16 +10,10 @@ from protorpc import remote, messages
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 
-from models import User, Game, GameHistory
-from models import StringMessage, NewGameForm, GameForm, MakeMoveForm, \
-    ScoreForms, GameForms, Leaderboard, LeaderboardForm, LeaderboardForms, GameHistoryForm, GameHistoryForms, \
-    LoginForm, UserForm, UserForms
+from models import User
+from models import StringMessage,UserForm, UserForms
 from utils import get_by_urlsafe, get_user
 
-NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
-GET_GAME_REQUEST = endpoints.ResourceContainer(
-    urlsafe_game_key=messages.StringField(1), )
-MAKE_MOVE_REQUEST = endpoints.ResourceContainer(MakeMoveForm)
 USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                            email=messages.StringField(2))
 LOGIN_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
