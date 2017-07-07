@@ -7,8 +7,6 @@ primarily with communication to/from the API's users."""
 import logging
 import endpoints
 from protorpc import remote, messages
-from google.appengine.api import memcache
-from google.appengine.api import taskqueue
 
 from models import User
 from models import StringMessage,UserForm, UserForms
@@ -18,16 +16,11 @@ USER_REQUEST = endpoints.ResourceContainer(firstName=messages.StringField(1),
                                            lastName=messages.StringField(2),
                                            dob=messages.StringField(3),
                                            phoneNumber=messages.StringField(4),
-                                           zipCode=messages.StringField(5),)
-LOGIN_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
-                                           password=messages.StringField(2))
-
-MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
-
+                                           zipCode=messages.StringField(5))
 
 @endpoints.api(name='word_bait', version='v1')
 class WordBaitAPI(remote.Service):
-    """Game API"""
+    """Person API"""
 
     @endpoints.method(request_message=USER_REQUEST,
                       response_message=StringMessage,
@@ -37,10 +30,14 @@ class WordBaitAPI(remote.Service):
     def create_user(self, request):
         """Create a User. Requires a unique username"""
         # No validation required for duplication
-        user = User(name=request.user_name, email=request.email)
+        user = User(firstName=request.firstName,
+                    lastName=request.lastName,
+                    dob=request.dob,
+                    phoneNumber=request.phoneNumber,
+                    zipCode=request.zipCode)
         user.put()
-        return StringMessage(message='User {} created!'.format(
-            request.user_name))
+        return StringMessage(message='{} created in our database!'.format(
+            request.firstName))
 
     @endpoints.method(response_message=UserForms,
                       path='all/users',
