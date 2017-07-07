@@ -12,15 +12,15 @@ handlers:
   secure: always
 
 - url: /
-  static_files: index.html
-  upload: index.html
+  static_files: dist/index.html
+  upload: dist/index.html
 
 #- url: /
 #  script: main.app
 
 - url: /(.*)
-  static_files: src/\1
-  upload: src/(.*)
+  static_files: dist/\1
+  upload: dist/(.*)
 
 libraries:
 - name: webapp2
