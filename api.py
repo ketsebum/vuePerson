@@ -14,6 +14,7 @@ from models import StringMessage,UserForm, UserForms
 from utils import get_by_urlsafe, get_user
 
 USER_REQUEST = endpoints.ResourceContainer(UserForm)
+DELETE_USER =  endpoints.ResourceContainer(id=messages.IntegerField(1))
 
 @endpoints.api(name='person', version='v1')
 class PersonAPI(remote.Service):
@@ -25,7 +26,7 @@ class PersonAPI(remote.Service):
                       name='create_user',
                       http_method='POST')
     def create_user(self, request):
-        """Create a User. Requires a unique username"""
+        """Create a Person"""
         # No validation required for duplication
 
         try:
@@ -47,9 +48,22 @@ class PersonAPI(remote.Service):
                       path='all/users',
                       name='all_users',
                       http_method='GET')
-    def all_users(self, request):
+    def all_users(self):
         """Get All Users"""
         return User.query().get().get_all_users()
+
+    @endpoints.method(request_message=DELETE_USER,
+                      response_message=StringMessage,
+                      path='user/{id}',
+                      name='delete_user',
+                      http_method='DELETE')
+    def delete_user(self, request):
+      """Delete User"""
+      remove = User.get_by_id(request.id)
+      name = remove.firstName
+      remove.key.delete()
+      return StringMessage(message='{} was deleted in our database!'.format(
+        name))
 
 
 api = endpoints.api_server([PersonAPI])
