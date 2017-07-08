@@ -19,11 +19,11 @@ class User(ndb.Model):
         users = User.query().fetch()
         return UserForms(items=[ref.to_form() for ref in users])
 
-    def to_form(self, message):
+    def to_form(self):
         form = UserForm()
         form.firstName = self.firstName
         form.lastName = self.lastName
-        form.dob = self.dob.__format__('MM/DD/YY')
+        form.dob = self.dob.strftime('%m/%d/%Y')
         form.phoneNumber = self.phoneNumber
         form.zipCode = self.zipCode
         return form
@@ -34,8 +34,8 @@ class UserForm(messages.Message):
     firstName = messages.StringField(1, required=True)
     lastName = messages.StringField(2, required=True)
     dob = messages.StringField(3, required=True)
-    phoneNumber = messages.StringField(4, required=True)
-    zipCode = messages.StringField(5, required=True)
+    phoneNumber = messages.IntegerField(4, required=True)
+    zipCode = messages.IntegerField(5, required=True)
 
 class UserForms(messages.Message):
     """Return multiple ScoreForms"""

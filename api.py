@@ -33,22 +33,12 @@ class PersonAPI(remote.Service):
         except ValueError:
           raise endpoints.BadRequestException('Wrong date format provided')
 
-        try:
-          phoneNumber = int(request.phoneNumber)
-        except ValueError:
-          raise endpoints.BadRequestException('Invalid phone number provided')
-
-        try:
-          zipCode = int(request.zipCode)
-        except ValueError:
-          raise endpoints.BadRequestException('Invalid zipcode provided')
-
 
         user = User(firstName=request.firstName,
                     lastName=request.lastName,
                     dob=dob,
-                    phoneNumber=phoneNumber,
-                    zipCode=zipCode)
+                    phoneNumber=request.phoneNumber,
+                    zipCode=request.zipCode)
         user.put()
         return StringMessage(message='{} was created in our database!'.format(
             request.firstName))
