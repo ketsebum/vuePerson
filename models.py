@@ -23,7 +23,7 @@ class User(ndb.Model):
         form = UserForm()
         form.firstName = self.firstName
         form.lastName = self.lastName
-        form.date = self.dob.__format__('MM/DD/YY')
+        form.dob = self.dob.__format__('MM/DD/YY')
         form.phoneNumber = self.phoneNumber
         form.zipCode = self.zipCode
         return form
@@ -33,7 +33,7 @@ class UserForm(messages.Message):
     """Return multiple ScoreForms"""
     firstName = messages.StringField(1, required=True)
     lastName = messages.StringField(2, required=True)
-    date = messages.StringField(3, required=True)
+    dob = messages.StringField(3, required=True)
     phoneNumber = messages.StringField(4, required=True)
     zipCode = messages.StringField(5, required=True)
 
