@@ -10,11 +10,10 @@ from protorpc import remote, messages
 
 from datetime import datetime
 from models import User
-from models import StringMessage,UserForm, UserForms
-from utils import get_by_urlsafe, get_user
+from models import StringMessage, UserForm, UserForms
 
 USER_REQUEST = endpoints.ResourceContainer(UserForm)
-DELETE_USER =  endpoints.ResourceContainer(id=messages.IntegerField(1))
+DELETE_USER = endpoints.ResourceContainer(id=messages.IntegerField(1))
 
 @endpoints.api(name='person', version='v1')
 class PersonAPI(remote.Service):
@@ -30,10 +29,9 @@ class PersonAPI(remote.Service):
         # No validation required for duplication
 
         try:
-          dob = datetime.strptime(request.dob, '%m/%d/%Y')
+            dob = datetime.strptime(request.dob, '%m/%d/%Y')
         except ValueError:
-          raise endpoints.BadRequestException('Wrong date format provided')
-
+            raise endpoints.BadRequestException('Wrong date format provided')
 
         user = User(firstName=request.firstName,
                     lastName=request.lastName,
