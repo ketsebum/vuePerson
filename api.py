@@ -45,7 +45,7 @@ class PersonAPI(remote.Service):
                       name='all_users',
                       http_method='GET')
     def all_users(self, request):
-        """Get All Users"""
+        """Get All People"""
         return User.query().get().get_all_users()
 
     @endpoints.method(request_message=DELETE_USER,
@@ -54,7 +54,7 @@ class PersonAPI(remote.Service):
                       name='delete_user',
                       http_method='DELETE')
     def delete_user(self, request):
-        """Delete User"""
+        """Delete Person"""
         remove = User.get_by_id(request.id)
         if not remove:
             raise endpoints.NotFoundException('Person not found!')
@@ -63,5 +63,30 @@ class PersonAPI(remote.Service):
         return StringMessage(message='{} was deleted in our database!'.format(
             name))
 
+    @endpoints.method(request_message=USER_REQUEST,
+                      response_message=StringMessage,
+                      path='update/user',
+                      name='update_user',
+                      http_method='POST')
+    def update_user(self, request):
+        """Update a Person"""
+
+        if not request.id:
+            raise endpoints.BadRequestException('ID required for update')
+
+        try:
+            dob = datetime.strptime(request.dob, '%m/%d/%Y')
+        except ValueError:
+            raise endpoints.BadRequestException('Wrong date format provided')
+
+        user = User.get_by_id(request.id)
+
+        if not user:
+            raise endpoints.NotFoundException('Person not found!')
+
+        user.update(request, dob)
+
+        return StringMessage(message='{} was updated in our database!'.format(
+          request.firstName))
 
 api = endpoints.api_server([PersonAPI])

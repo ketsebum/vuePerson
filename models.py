@@ -33,6 +33,15 @@ class User(ndb.Model):
     def delete(self):
         self.key.delete()
 
+    def update(self, request, dob):
+        self.firstName = request.firstName
+        self.lastName = request.lastName
+        self.dob = dob
+        self.zipCode = request.zipCode
+        self.phoneNumber = request.phoneNumber
+
+        self.put()
+
 
 class UserForm(messages.Message):
     """Return UserForm"""
