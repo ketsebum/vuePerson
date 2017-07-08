@@ -58,12 +58,14 @@ class PersonAPI(remote.Service):
                       name='delete_user',
                       http_method='DELETE')
     def delete_user(self, request):
-      """Delete User"""
-      remove = User.get_by_id(request.id)
-      name = remove.firstName
-      remove.key.delete()
-      return StringMessage(message='{} was deleted in our database!'.format(
-        name))
+        """Delete User"""
+        remove = User.get_by_id(request.id)
+        if not remove:
+            raise endpoints.NotFoundException('Person not found!')
+        name = remove.firstName
+        remove.delete()
+        return StringMessage(message='{} was deleted in our database!'.format(
+            name))
 
 
 api = endpoints.api_server([PersonAPI])

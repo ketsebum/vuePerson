@@ -28,6 +28,9 @@ class User(ndb.Model):
         form.zipCode = self.zipCode
         return form
 
+    def delete(self):
+        self.key.delete()
+
 
 class UserForm(messages.Message):
     """Return multiple ScoreForms"""
