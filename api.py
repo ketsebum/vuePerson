@@ -15,6 +15,7 @@ from models import StringMessage, UserForm, UserForms
 USER_REQUEST = endpoints.ResourceContainer(UserForm)
 DELETE_USER = endpoints.ResourceContainer(id=messages.IntegerField(1))
 
+
 @endpoints.api(name='person', version='v1')
 class PersonAPI(remote.Service):
     """Person API"""
