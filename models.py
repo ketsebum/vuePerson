@@ -7,6 +7,7 @@ from protorpc import messages
 from google.appengine.ext import ndb
 import time
 
+
 class User(ndb.Model):
     """User profile"""
     firstName = ndb.StringProperty(required=True)
@@ -26,6 +27,7 @@ class User(ndb.Model):
         form.dob = self.dob.strftime('%m/%d/%Y')
         form.phoneNumber = self.phoneNumber
         form.zipCode = self.zipCode
+        form.id = self.key.id()
         return form
 
     def delete(self):
@@ -33,16 +35,19 @@ class User(ndb.Model):
 
 
 class UserForm(messages.Message):
-    """Return multiple ScoreForms"""
+    """Return UserForm"""
     firstName = messages.StringField(1, required=True)
     lastName = messages.StringField(2, required=True)
     dob = messages.StringField(3, required=True)
     phoneNumber = messages.IntegerField(4, required=True)
     zipCode = messages.IntegerField(5, required=True)
+    id = messages.IntegerField(6, required=False)
+
 
 class UserForms(messages.Message):
-    """Return multiple ScoreForms"""
+    """Return multiple UserForms"""
     items = messages.MessageField(UserForm, 1, repeated=True)
+
 
 class StringMessage(messages.Message):
     """StringMessage-- outbound (single) string message"""

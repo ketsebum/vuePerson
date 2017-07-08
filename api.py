@@ -44,7 +44,7 @@ class PersonAPI(remote.Service):
                       path='all/users',
                       name='all_users',
                       http_method='GET')
-    def all_users(self):
+    def all_users(self, request):
         """Get All Users"""
         return User.query().get().get_all_users()
 
