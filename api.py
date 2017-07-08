@@ -13,11 +13,7 @@ from models import User
 from models import StringMessage,UserForm, UserForms
 from utils import get_by_urlsafe, get_user
 
-USER_REQUEST = endpoints.ResourceContainer(firstName=messages.StringField(1),
-                                           lastName=messages.StringField(2),
-                                           dob=messages.StringField(3),
-                                           phoneNumber=messages.StringField(4),
-                                           zipCode=messages.StringField(5))
+USER_REQUEST = endpoints.ResourceContainer(UserForm)
 
 @endpoints.api(name='person', version='v1')
 class PersonAPI(remote.Service):
@@ -31,11 +27,28 @@ class PersonAPI(remote.Service):
     def create_user(self, request):
         """Create a User. Requires a unique username"""
         # No validation required for duplication
+
+        try:
+          dob = datetime.strptime(request.dob, '%m/%d/%Y')
+        except ValueError:
+          raise endpoints.BadRequestException('Wrong date format provided')
+
+        try:
+          phoneNumber = int(request.phoneNumber)
+        except ValueError:
+          raise endpoints.BadRequestException('Invalid phone number provided')
+
+        try:
+          zipCode = int(request.zipCode)
+        except ValueError:
+          raise endpoints.BadRequestException('Invalid zipcode provided')
+
+
         user = User(firstName=request.firstName,
                     lastName=request.lastName,
-                    dob=datetime.strptime(request.dob, '%m/%d/%Y'),
-                    phoneNumber=int(request.phoneNumber),
-                    zipCode=int(request.zipCode))
+                    dob=dob,
+                    phoneNumber=phoneNumber,
+                    zipCode=zipCode)
         user.put()
         return StringMessage(message='{} was created in our database!'.format(
             request.firstName))
