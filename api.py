@@ -8,6 +8,7 @@ import logging
 import endpoints
 from protorpc import remote, messages
 
+from datetime import datetime
 from models import User
 from models import StringMessage,UserForm, UserForms
 from utils import get_by_urlsafe, get_user
@@ -32,9 +33,9 @@ class PersonAPI(remote.Service):
         # No validation required for duplication
         user = User(firstName=request.firstName,
                     lastName=request.lastName,
-                    dob=request.dob,
-                    phoneNumber=request.phoneNumber,
-                    zipCode=request.zipCode)
+                    dob=datetime.strptime(request.dob, '%m/%d/%Y'),
+                    phoneNumber=int(request.phoneNumber),
+                    zipCode=int(request.zipCode))
         user.put()
         return StringMessage(message='{} created in our database!'.format(
             request.firstName))
