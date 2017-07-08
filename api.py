@@ -37,7 +37,7 @@ class PersonAPI(remote.Service):
                     phoneNumber=int(request.phoneNumber),
                     zipCode=int(request.zipCode))
         user.put()
-        return StringMessage(message='{} created in our database!'.format(
+        return StringMessage(message='{} was created in our database!'.format(
             request.firstName))
 
     @endpoints.method(response_message=UserForms,
