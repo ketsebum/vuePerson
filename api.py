@@ -37,8 +37,8 @@ class PersonAPI(remote.Service):
                     phoneNumber=request.phoneNumber,
                     zipCode=request.zipCode)
         user.put()
-        return StringMessage(message='{} was created in our database!'.format(
-            request.firstName))
+        return StringMessage(message='{}'.format(
+            user.key.id()))
 
     @endpoints.method(response_message=UserForms,
                       path='all/users',
@@ -46,7 +46,10 @@ class PersonAPI(remote.Service):
                       http_method='GET')
     def all_users(self, request):
         """Get All People"""
-        return User.query().get().get_all_users()
+        base = User.query().get()
+        if not base:
+            raise endpoints.NotFoundException('People not found!')
+        return base.get_all_users()
 
     @endpoints.method(request_message=DELETE_USER,
                       response_message=StringMessage,
@@ -58,10 +61,9 @@ class PersonAPI(remote.Service):
         remove = User.get_by_id(request.id)
         if not remove:
             raise endpoints.NotFoundException('Person not found!')
-        name = remove.firstName
         remove.delete()
-        return StringMessage(message='{} was deleted in our database!'.format(
-            name))
+        return StringMessage(message='{}'.format(
+          request.id))
 
     @endpoints.method(request_message=USER_REQUEST,
                       response_message=StringMessage,
