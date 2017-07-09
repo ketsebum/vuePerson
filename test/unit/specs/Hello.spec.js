@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Hello from '@/components/Hello';
+import BoostrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import mapState from 'vuex'
 
 Vue.use(Vuex);
@@ -21,7 +22,8 @@ describe('Hello.vue', () => {
       }
     };
 
-    Constructor = Vue.extend(Hello)
+    Constructor = Vue.extend(Hello);
+    Vue.use(BoostrapVue);
     vm = new Constructor({ store: new Vuex.Store(mockedStore)}).$mount()
   });
 
