@@ -14,11 +14,82 @@ describe('Hello.vue', () => {
   beforeEach(function() {
     mockedStore = {
       state: {
-        count: 0
+        alert: {
+          type: 'info',
+          msg: 'No alert',
+          countdown: 0
+        },
+        people: []
       },
       mutations: {
-        increment: state => state.count++,
-        decrement: state => state.count--
+        decrementAlert: state => state.alert.countdown <= 0 ? state.alert.countdown = 0 : state.alert.countdown--,
+        sendAlert: (state, alert) => state.alert = alert,
+        loadPeople: (state, people) => state.people = people,
+        addPerson: (state, person) => state.people.push(person),
+        updatePerson: (state, person) => {
+          var id = person.id;
+          state.people.forEach(function(v, i) {
+            if (id === v.id) {
+              v.firstName = person.firstName;
+              v.lastName = person.lastName;
+              v.dob = person.dob;
+              v.zipCode = person.zipCode;
+              v.phoneNumber = person.phoneNumber;
+              v.edit = false;
+              v.loading = false;
+            }
+          });
+        },
+        toggleEditOn: (state, id) => {
+          var id = id;
+          state.people.forEach(function(v, i) {
+            if (id === v.id) {
+              v.edit = true;
+            } else {
+              v.edit = false;
+            }
+          });
+        },
+        toggleEditOff: (state, id) => {
+          var id = id;
+          state.people.forEach(function(v, i) {
+            if (id === v.id) {
+              v.edit = false;
+            }
+          });
+        },
+        turnLoadingOn: (state, id) => {
+          var id = id;
+          state.people.forEach(function(v, i) {
+            if (id === v.id) {
+              v.loading = true;
+            }
+          });
+        },
+        turnLoadingOff: (state, id) => {
+          var id = id;
+          state.people.forEach(function(v, i) {
+            if (id === v.id) {
+              v.loading = false;
+            }
+          });
+        },
+        removePerson: (state, id) => {
+          var index = -1;
+          state.people.forEach(function(v, i) {
+            if (id === v.id) {
+              index = i;
+            }
+          });
+          state.people.splice(index, 1);
+        }
+      },
+      actions: {
+        decrementAsync ({ commit }) {
+          setTimeout(() => {
+            commit('decrementAlert')
+          }, 1000)
+        }
       }
     };
 
@@ -30,14 +101,14 @@ describe('Hello.vue', () => {
   it('should render correct contents', () => {
     // const Constructor = Vue.extend(Hello);
     // const vm = new Constructor().$mount();
-    expect(vm.$el.querySelector('.hello h1').textContent)
-      .to.equal('Welcome to Your Vue.js App');
+    // expect(vm.$el.querySelector('.hello h1').textContent)
+    //   .to.equal('Welcome to Your Vue.js App');
   });
   it('should have increment function', () => {
-    expect(typeof Hello.methods.increment).to.equal('function');
+    expect(typeof Hello.methods.createPerson).to.equal('function');
   });
   it('should decrement properly', () => {
-    vm.decrement();
-    expect(vm.$store.state.count).to.equal(-1);
+    vm.createPerson();
+    expect(vm.create).to.equal(true);
   });
 });
