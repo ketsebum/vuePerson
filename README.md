@@ -1,6 +1,6 @@
 # vueperson
 
-> A Vue.js project
+> A VueJS Person App
 
 ## Build Setup
 
@@ -19,12 +19,15 @@ npm run build --report
 
 # run unit tests
 npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Dependencies
+
+Google app engine is required for the service endpoints to work.
+
+If you have that installed, then the following command should start up the backend:
+``` bash
+~location/to/dev_appserver.py .
+```
