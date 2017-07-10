@@ -30,6 +30,7 @@ export const mutations = {
         v.zipCode = person.zipCode;
         v.phoneNumber = person.phoneNumber;
         v.edit = false;
+        v.loading = false;
       }
     });
   },
@@ -38,6 +39,22 @@ export const mutations = {
     state.people.forEach(function(v, i) {
       if (id === v.id) {
         v.edit = !v.edit;
+      }
+    });
+  },
+  turnLoadingOn: (state, id) => {
+    var id = id;
+    state.people.forEach(function(v, i) {
+      if (id === v.id) {
+        v.loading = true;
+      }
+    });
+  },
+  turnLoadingOff: (state, id) => {
+    var id = id;
+    state.people.forEach(function(v, i) {
+      if (id === v.id) {
+        v.loading = false;
       }
     });
   },

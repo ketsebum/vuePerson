@@ -14,7 +14,7 @@ import vueAlert from './components/Alert.vue'
 export default {
   name: 'app',
   components: {
-      vueAlert
+      vueAlert,
   }
 };
 </script>
