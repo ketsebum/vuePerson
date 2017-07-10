@@ -20,14 +20,6 @@ export const mutations = {
   sendAlert: (state, alert) => state.alert = alert,
   loadPeople: (state, people) => state.people = people,
   addPerson: (state, person) => state.people.push(person),
-  editPerson: (state, person) => {
-    var id = person.id;
-    state.people.forEach(function(v, i) {
-      if (id === v.id) {
-        v.edit = true;
-      }
-    });
-  },
   updatePerson: (state, person) => {
     var id = person.id;
     state.people.forEach(function(v, i) {
@@ -41,11 +33,11 @@ export const mutations = {
       }
     });
   },
-  stopPerson: (state, person) => {
-    var id = person.id;
+  toggleEdit: (state, id) => {
+    var id = id;
     state.people.forEach(function(v, i) {
       if (id === v.id) {
-        v.edit = false;
+        v.edit = !v.edit;
       }
     });
   },

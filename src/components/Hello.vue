@@ -5,23 +5,23 @@
         <div class="col-sm-6 col-md-4 col-lg-3" v-for="person in people">
           <b-card class="mb2">
             <div slot="header">
-              <input v-if="person.edit" v-model.trim="person.fullName" placeholder="Full Name">
+              <input v-if="person.edit" v-model.trim="editPersonTEMP.fullName" placeholder="Full Name">
               <span v-else="person.edit" class="header" >{{person.firstName}} {{person.lastName}}</span>
             </div>
 
             <span class="title">Date of Birth: </span>
-            <input v-if="person.edit" v-model="person.dob" placeholder="01/01/1900">
+            <input v-if="person.edit" v-model="editPersonTEMP.dob" placeholder="01/01/1900">
             <span v-else="person.edit">{{ person.dob }}</span>
             <br>
 
             <span class="title">Zip Code: </span>
-            <input v-if="person.edit" type="number" v-model.number="person.zipCode" placeholder="12345">
+            <input v-if="person.edit" type="number" v-model.number="editPersonTEMP.zipCode" placeholder="12345">
             <span v-else="person.edit">{{ person.zipCode }}</span>
             <br>
 
 
             <span class="title">Phone Number: </span>
-            <input v-if="person.edit" type="number" v-model.number="person.phoneNumber" placeholder="1234567890">
+            <input v-if="person.edit" type="number" v-model.number="editPersonTEMP.phoneNumber" placeholder="1234567890">
             <span v-else="person.edit">{{ person.phoneNumber }}</span>
             <br>
             <small slot="footer">
@@ -67,7 +67,8 @@ export default {
       deletePersonURL: 'user/',
       updatePersonURL: 'update/user/',
       create: false,
-      newPerson: {}
+      newPerson: {},
+      editPersonTEMP: {}
     };
   },
   computed: mapState([
@@ -104,10 +105,16 @@ export default {
       this.create = true;
     },
     editPerson: function(person) {
-      this.$store.commit("editPerson", person);
+      //Creating Temporary Edit person to not allow bad edits into store
+      this.editPersonTEMP.fullName = person.fullName;
+      this.editPersonTEMP.zipCode = person.zipCode;
+      this.editPersonTEMP.phoneNumber = person.phoneNumber;
+      this.editPersonTEMP.dob = person.dob;
+
+      this.$store.commit("toggleEdit", person.id);
     },
     stopUpdate: function(person) {
-      this.$store.commit("stopPerson", person);
+      this.$store.commit("toggleEdit", person.id);
     },
     cancelCreate: function() {
       this.forget();
