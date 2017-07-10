@@ -128,13 +128,13 @@ export default {
       this.editPersonTEMP.dob = person.dob;
       this.editPersonTEMP.id = person.id;
 
-      this.$store.commit("toggleEdit", person.id);
+      this.$store.commit("toggleEditOn", person.id);
 
       //Using forceUpdate because "New Persons" created this session won't go into edit mode.
       this.$forceUpdate();
     },
     stopUpdate: function(person) {
-      this.$store.commit("toggleEdit", person.id);
+      this.$store.commit("toggleEditOff", person.id);
     },
     cancelCreate: function() {
       this.forget();
@@ -205,6 +205,7 @@ export default {
     updateSuccess: function(response) {
       this.$store.commit("updatePerson", this.newPerson);
       this.sendSuccess(response.data.message);
+      this.stopUpdate(this.newPerson);
       this.turnLoadingOff(this.newPerson);
       this.forget();
     },

@@ -34,11 +34,21 @@ export const mutations = {
       }
     });
   },
-  toggleEdit: (state, id) => {
+  toggleEditOn: (state, id) => {
     var id = id;
     state.people.forEach(function(v, i) {
       if (id === v.id) {
-        v.edit = !v.edit;
+        v.edit = true;
+      } else {
+        v.edit = false;
+      }
+    });
+  },
+  toggleEditOff: (state, id) => {
+    var id = id;
+    state.people.forEach(function(v, i) {
+      if (id === v.id) {
+        v.edit = false;
       }
     });
   },
