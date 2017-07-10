@@ -188,6 +188,7 @@ export default {
     deletePerson: function(person) {
       this.pageLoadingOn();
       this.turnLoadingOn(person);
+      this.newPerson = person;
       this.destroyPerson(person.id);
     },
 
@@ -230,7 +231,7 @@ export default {
       this.forget();
     },
     updateFailure: function(error) {
-      this.sendError(error.response.data.error.message);
+      this.validFailure(error);
       this.turnLoadingOff(this.newPerson);
       this.forget();
     },
@@ -256,7 +257,7 @@ export default {
       this.creationLoadingOff();
     },
     storageFailure: function(error) {
-      this.sendError(error.response.data.error.message);
+      this.validFailure(error);
       this.creationLoadingOff();
     },
 
@@ -275,7 +276,7 @@ export default {
       this.pageLoadingOff();
     },
     peopleFailure: function(error) {
-      this.sendWarning(error.response.data.error.message);
+      this.validWarning(error);
       this.pageLoadingOff();
     },
 
@@ -289,8 +290,25 @@ export default {
       this.pageLoadingOff();
     },
     destroyFailure: function(error) {
-      this.sendError(error.response.data.error.message);
+      this.validFailure(error);
       this.pageLoadingOff();
+      this.turnLoadingOff(this.newPerson);
+      this.forget();
+    },
+
+    validFailure: function(error) {
+      if (error && error.response && error.response.data && error.response.data.error && error.response.data.error.message) {
+        this.sendError(error.response.data.error.message);
+      } else {
+        this.sendError("System error occurred. Please try again later as we try to fix this quickly!");
+      }
+    },
+    validWarning: function(error) {
+      if (error && error.response && error.response.data && error.response.data.error && error.response.data.error.message) {
+        this.sendWarning(error.response.data.error.message);
+      } else {
+        this.sendError("System error occurred. Please try again later as we try to fix this quickly!");
+      }
     }
   }
 };
