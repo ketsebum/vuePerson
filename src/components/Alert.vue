@@ -1,41 +1,29 @@
 <template>
   <div>
-    <b-alert show>
-      Default Alert
+    <b-alert :show="alert.countdown" dismissible :variant="alert.type" @dismiss-count-down="countDownChanged">
+      {{alert.msg}}
     </b-alert>
-
-    <b-alert variant="success" show>
-      Success Alert
-    </b-alert>
-
-    <b-alert variant="danger" dismissible :show="showDismissibleAlert" @dismissed="showDismissibleAlert=false">
-      Dismissible Alert!
-    </b-alert>
-
-    <b-alert :show="dismissCountDown" dismissible variant="warning" @dismiss-count-down="countDownChanged">
-      This alert will dismiss after {{dismissCountDown}} seconds...
-    </b-alert>
-
-    <b-btn @click="showAlert" variant="info" class="m-1">Show alert with count-down timer</b-btn>
-    <b-btn @click="showDismissibleAlert=true" variant="info" class="m-1">
-      Show dismissible alert ({{showDismissibleAlert?'visible':'hidden'}})
-    </b-btn>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     name: "vueAlert",
-    data: {
-      dismissCountDown: null,
-      showDismissibleAlert: false
+    data() {
+        return {
+          dismissCountDown: null,
+          showDismissibleAlert: false
+        }
     },
+    computed: mapState([
+      // map this.alert to store.state.alert
+      'alert'
+    ]),
     methods: {
-      countDownChanged(dismissCountDown) {
-        this.dismissCountDown = dismissCountDown
-      },
-      showAlert() {
-        this.dismissCountDown = 5
+      countDownChanged() {
+        this.$store.dispatch('decrementAsync');
       }
     }
   }

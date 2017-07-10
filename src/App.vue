@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vueAlert></vueAlert>
+    <vueAlert class="container"></vueAlert>
     <h1>List of people with VueJS</h1>
     <img src="./assets/logo.png">
     <router-view></router-view>
@@ -26,6 +26,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0px;
+}
+h1 {
+  margin-top: 10px;
 }
 </style>

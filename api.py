@@ -7,7 +7,7 @@ from protorpc import remote, messages
 
 from datetime import datetime
 from models import User
-from models import StringMessage, UserForm, UserForms
+from models import StringMessage, UserForm, UserForms, IDMessage
 
 USER_REQUEST = endpoints.ResourceContainer(UserForm)
 DELETE_USER = endpoints.ResourceContainer(id=messages.IntegerField(1))
@@ -18,7 +18,7 @@ class PersonAPI(remote.Service):
     """Person API"""
 
     @endpoints.method(request_message=USER_REQUEST,
-                      response_message=StringMessage,
+                      response_message=IDMessage,
                       path='user',
                       name='create_user',
                       http_method='POST')
@@ -37,8 +37,8 @@ class PersonAPI(remote.Service):
                     phoneNumber=request.phoneNumber,
                     zipCode=request.zipCode)
         user.put()
-        return StringMessage(message='{}'.format(
-            user.key.id()))
+        return IDMessage(message='{} was created successfully in the database!'.format(user.firstName),
+                             id='{}'.format(user.key.id()))
 
     @endpoints.method(response_message=UserForms,
                       path='all/users',
@@ -48,22 +48,24 @@ class PersonAPI(remote.Service):
         """Get All People"""
         base = User.query().get()
         if not base:
-            raise endpoints.NotFoundException('People not found!')
+            raise endpoints.NotFoundException('There are no people found in our database!')
         return base.get_all_users()
 
     @endpoints.method(request_message=DELETE_USER,
-                      response_message=StringMessage,
+                      response_message=IDMessage,
                       path='user/{id}',
                       name='delete_user',
                       http_method='DELETE')
     def delete_user(self, request):
         """Delete Person"""
         remove = User.get_by_id(request.id)
+        user = remove.firstName
+        id = request.id
         if not remove:
             raise endpoints.NotFoundException('Person not found!')
         remove.delete()
-        return StringMessage(message='{}'.format(
-          request.id))
+        return IDMessage(message='{} was deleted successfully in the database!'.format(user),
+                         id='{}'.format(id))
 
     @endpoints.method(request_message=USER_REQUEST,
                       response_message=StringMessage,

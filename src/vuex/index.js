@@ -7,13 +7,17 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 export const state = {
-  count: 0,
+  alert: {
+    type: 'info',
+    msg: 'No alert',
+    countdown: 0
+  },
   people: []
 };
 
 export const mutations = {
-  increment: state => state.count++,
-  decrement: state => state.count--,
+  decrementAlert: state => state.alert.countdown <= 0 ? state.alert.countdown = 0 : state.alert.countdown--,
+  sendAlert: (state, alert) => state.alert = alert,
   loadPeople: (state, people) => state.people = people,
   addPerson: (state, person) => state.people.push(person),
   editPerson: (state, person) => {
@@ -21,6 +25,19 @@ export const mutations = {
     state.people.forEach(function(v, i) {
       if (id === v.id) {
         v.edit = true;
+      }
+    });
+  },
+  updatePerson: (state, person) => {
+    var id = person.id;
+    state.people.forEach(function(v, i) {
+      if (id === v.id) {
+        v.firstName = person.firstName;
+        v.lastName = person.lastName;
+        v.dob = person.dob;
+        v.zipCode = person.zipCode;
+        v.phoneNumber = person.phoneNumber;
+        v.edit = false;
       }
     });
   },
@@ -43,9 +60,18 @@ export const mutations = {
   }
 };
 
+export const actions = {
+  decrementAsync ({ commit }) {
+    setTimeout(() => {
+      commit('decrementAlert')
+    }, 1000)
+  }
+}
+
 const store = new Vuex.Store({
   state,
   mutations,
+  actions,
 });
 
 export default store
