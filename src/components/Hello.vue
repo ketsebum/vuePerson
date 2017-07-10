@@ -259,6 +259,7 @@ export default {
     storageFailure: function(error) {
       this.validFailure(error);
       this.creationLoadingOff();
+      this.forget();
     },
 
     //Read people functions
