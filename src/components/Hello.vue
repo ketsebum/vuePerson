@@ -135,6 +135,9 @@ export default {
     },
     stopUpdate: function(person) {
       this.$store.commit("toggleEditOff", person.id);
+
+      //Using forceUpdate because "New Persons" created this session won't go into edit mode.
+      this.$forceUpdate();
     },
     cancelCreate: function() {
       this.forget();
@@ -146,10 +149,16 @@ export default {
 
     //Toggle Loading Indicators
     turnLoadingOn: function(person) {
-      this.$store.commit('turnLoadingOn', person.id)
+      this.$store.commit('turnLoadingOn', person.id);
+
+      //Using forceUpdate because "New Persons" created this session won't handle loading.
+      this.$forceUpdate();
     },
     turnLoadingOff: function(person) {
-      this.$store.commit('turnLoadingOff', person.id)
+      this.$store.commit('turnLoadingOff', person.id);
+
+      //Using forceUpdate because "New Persons" created this session won't handle loading.
+      this.$forceUpdate();
     },
     pageLoadingOn: function() {
       this.pageLoader = true;
@@ -160,6 +169,7 @@ export default {
 
     //wrapper functions for DOM interaction
     updatePerson: function(person) {
+      this.stopUpdate(this.newPerson);
       this.updateInDatabase(person);
     },
     savePerson: function() {
@@ -205,7 +215,6 @@ export default {
     updateSuccess: function(response) {
       this.$store.commit("updatePerson", this.newPerson);
       this.sendSuccess(response.data.message);
-      this.stopUpdate(this.newPerson);
       this.turnLoadingOff(this.newPerson);
       this.forget();
     },
@@ -228,6 +237,7 @@ export default {
     storageSuccess: function(response) {
       this.newPerson.id = response.data.id;
       this.newPerson.edit = false;
+      this.newPerson.loading = false;
       this.$store.commit("addPerson", this.newPerson);
       this.sendSuccess(response.data.message);
       this.forget();
