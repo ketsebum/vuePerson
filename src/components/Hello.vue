@@ -42,6 +42,9 @@
         </div>
         <div class="col-sm-6 col-md-4 col-lg-3">
           <b-card class="mb2">
+            <div class="card-overlay" v-if="creating">
+              <pulse-loader class="loader"></pulse-loader>
+            </div>
             <div slot="header">
               <input v-if="create" v-model.trim="newPerson.fullName" placeholder="Full Name">
               <span class="header" v-else="create">New Person</span>
@@ -82,7 +85,8 @@ export default {
       create: false,
       newPerson: {},
       editPersonTEMP: {},
-      pageLoader: false
+      pageLoader: false,
+      creating: false
     };
   },
   computed: mapState([
@@ -166,6 +170,12 @@ export default {
     pageLoadingOff: function() {
       this.pageLoader = false;
     },
+    creationLoadingOn: function() {
+      this.creating = true;
+    },
+    creationLoadingOff: function() {
+      this.creating = false;
+    },
 
     //wrapper functions for DOM interaction
     updatePerson: function(person) {
@@ -177,6 +187,7 @@ export default {
     },
     deletePerson: function(person) {
       this.pageLoadingOn();
+      this.turnLoadingOn(person);
       this.destroyPerson(person.id);
     },
 
@@ -228,7 +239,7 @@ export default {
     storeInDatabase: function() {
       var nameArray = this.newPerson.fullName.split(' ');
       if (this.validate(this.newPerson)) {
-        this.pageLoadingOn();
+        this.creationLoadingOn();
         this.newPerson.firstName = nameArray[0];
         this.newPerson.lastName = nameArray[1];
         axios.post(this.baseURL + this.addPersonURL, this.newPerson).then(this.storageSuccess).catch(this.storageFailure);
@@ -242,11 +253,11 @@ export default {
       this.sendSuccess(response.data.message);
       this.forget();
       this.create = false;
-      this.pageLoadingOff();
+      this.creationLoadingOff();
     },
     storageFailure: function(error) {
       this.sendError(error.response.data.error.message);
-      this.pageLoadingOff();
+      this.creationLoadingOff();
     },
 
     //Read people functions
